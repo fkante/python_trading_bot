@@ -1,0 +1,2 @@
+|ERROR|2020-08-31 10:29:24,313|Socket returns unknown error.
+|ERROR|2020-08-31 10:29:24,315|Connection aborted, failed to reconnect
