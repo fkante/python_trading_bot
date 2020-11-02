@@ -7,18 +7,16 @@ from typing import Tuple
 class Portfolio():
 
     def __init__(self, account_number: Optional[str]):
-
-        self.positions = {}
-        self.positions_count = 0
-        self.market_value = 0.0
-        self.profit_value = 0.0
-        self.risk_rolerance = 0.0
-        self.account_number = account_number
+        self.positions =        {}
+        self.positions_count =  0
+        self.market_value =     0.0
+        self.profit_value =     0.0
+        self.risk_rolerance =   0.0
+        self.account_number =   account_number
 
     def add_position(self, symbol: str, asset_type: str,
                      purchase_date: Optional[str],
                      quantity: int = 0, purchase_price: float = 0.0) -> dict:
-
         self.positions[symbol] = {}
         self.positions[symbol]["symbol"] = symbol
         self.positions[symbol]["quantity"] = quantity
@@ -28,7 +26,6 @@ class Portfolio():
         return self.positions[symbol]
 
     def add_multiple_positions(self, positions: List[dict]) -> dict:
-
         if isinstance(positions, list):
             for position in positions:
                 self.add_position(
@@ -43,7 +40,6 @@ class Portfolio():
             raise TypeError("Positions must be a list of dictionaries.")
 
     def remove_position(self, symbol: str) -> Tuple[bool, str]:
-
         if symbol in self.positions:
             del self.positions[symbol]
             return (True, "{symbol} was successfully removed.".format(symbol=symbol))
@@ -51,14 +47,12 @@ class Portfolio():
             return (False, "{symbol} did not exist in the portfolio.".format(symbol=symbol))
 
     def in_portfolio(self, symbol: str) -> bool:
-
         if symbol in self.positions:
             return True
         else:
             return False
 
     def is_profitable(self, symbol: str, current_price: float) -> float:
-
         purchase_price = self.positions[symbol]["purchase_price"]
         if (purchase_price <= current_price):
             return True
