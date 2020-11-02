@@ -25,15 +25,15 @@ class PyRobot():
                  api_key: str = None, api_secret: str = None, nonce: str = None,
                  paper_trading: bool = False) -> None:
 
-        self.account_number: str = account_number
-        self.client_id: str = client_id
-        self.api_key: str = api_key
-        self.api_secret: str = api_secret
-        self.nonce: str = nonce
-        self.trades: dict = {}
-        self.historical_prices: dict = {}
-        self.stock_frame = None
-        self.paper_trading = paper_trading
+        self.account_number: str =      account_number
+        self.client_id: str =           client_id
+        self.api_key: str =             api_key
+        self.api_secret: str =          api_secret
+        self.nonce: str =               nonce
+        self.trades: dict =             {}
+        self.historical_prices: dict =  {}
+        self.stock_frame =              None
+        self.paper_trading =            paper_trading
 
     def get_client_id(self) -> str:
         return (self.client_id)
@@ -49,7 +49,6 @@ class PyRobot():
 
     @property
     def pre_market_open(self) -> bool:
-
         pre_market_start_time = datetime.utcnow().replace(hour=7, minute=30, second=00).timestamp()
         market_start_time = datetime.utcnow().replace(hour=8, minute=00, second=00).timestamp()
         right_now = datetime.utcnow().timestamp()
@@ -61,7 +60,6 @@ class PyRobot():
 
     @property
     def post_market_open(self) -> bool:
-
         post_market_end_time = datetime.utcnow().replace(hour=17, minute=00, second=00).timestamp()
         market_end_time = datetime.utcnow().replace(hour=16, minute=30, second=00).timestamp()
         right_now = datetime.utcnow().timestamp()
@@ -73,11 +71,9 @@ class PyRobot():
 
     @property
     def regular_maket_open(self) -> bool:
-
         market_start_time = datetime.utcnow().replace(hour=8, minute=00, second=00).timestamp()
         market_end_time = datetime.utcnow().replace(hour=16, minute=30, second=00).timestamp()
         right_now = datetime.utcnow().timestamp()
-
 
         if market_end_time >= right_now >= market_start_time:
             return True
@@ -85,7 +81,6 @@ class PyRobot():
             return False
 
     def create_portfolio(self):
-
         # init new portfolio object
         self.portfolio = Portfolio(account_number = self.account_number)
         return self.portfolio
@@ -94,7 +89,6 @@ class PyRobot():
                      long_or_short: str, order_type: str = 'mkt',
                      price: float = 0.0,
                      stop_limit_price: float = 0.0) -> Trade:
-
         trade = Trade()
         trade.new_trade(
             trade_id = trade_id,
@@ -108,13 +102,10 @@ class PyRobot():
         return trade
 
     def create_stock_frame(self, data: List[dict]) -> StockFrame:
-
         self.stock_frame = StockFrame(data = data)
-
         return self.stock_frame
 
     def grab_current_quotes(self) -> dict:
-
         quotes = self.portfolio.positions.keys()
         quotes_content = {}
         for quote in quotes:
@@ -125,7 +116,6 @@ class PyRobot():
         return quotes_content
 
     def grab_single_current_quote(self, symbol: str = 'ethusd') -> dict:
-
         quotes_content = {}
         quotes_content[symbol] = bitstamp_requests(
             request_parameter = 'ticker',
@@ -135,7 +125,6 @@ class PyRobot():
 
     # 4h bar by default with 1 week of data
     def grab_historical_prices(self, symbols: List[str] = None, step: str = '3600', limit: str ='500'):
-
         self._step = step
         self._limit = limit
         data = {'step' : step, 'limit' : limit}
@@ -173,7 +162,6 @@ class PyRobot():
         return self.historical_prices
 
     def get_latest_quote(self) -> List[dict]:
-
         data = {'step' : self._step, 'limit' : 1}
 
         for symbol in self.portfolio.positions:
