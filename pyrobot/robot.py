@@ -49,6 +49,10 @@ class PyRobot():
 
     @property
     def pre_market_open(self) -> bool:
+        '''
+        This series of functions return if market is open or not, the use is specific for 
+        the French market and is relevant only for equity trading
+        '''
         pre_market_start_time = datetime.utcnow().replace(hour=7, minute=30, second=00).timestamp()
         market_start_time = datetime.utcnow().replace(hour=8, minute=00, second=00).timestamp()
         right_now = datetime.utcnow().timestamp()
@@ -81,7 +85,9 @@ class PyRobot():
             return False
 
     def create_portfolio(self):
-        # init new portfolio object
+        '''
+        init new portfolio object with the account number
+        '''
         self.portfolio = Portfolio(account_number = self.account_number)
         return self.portfolio
 
@@ -89,6 +95,10 @@ class PyRobot():
                      long_or_short: str, order_type: str = 'mkt',
                      price: float = 0.0,
                      stop_limit_price: float = 0.0) -> Trade:
+        '''
+        Init a new instance of the trade object.
+        The point is to simplify the process of building an order
+        '''
         trade = Trade()
         trade.new_trade(
             trade_id = trade_id,
@@ -128,14 +138,12 @@ class PyRobot():
         self._step = step
         self._limit = limit
         data = {'step' : step, 'limit' : limit}
-
         new_prices = []
 
         if not symbols:
             symbols = self.portfolio.positions
 
         for symbol in symbols:
-
             historical_prices_response = bitstamp_requests(
                 request_parameter = 'ohlc',
                 currency_pair = symbol,
@@ -146,7 +154,6 @@ class PyRobot():
             self.historical_prices[symbol]['candles'] = historical_prices_response['data']['ohlc']
 
             for candle in historical_prices_response['data']['ohlc']:
-
                 new_price_mini_dict = {}
                 new_price_mini_dict['symbol'] = symbol
                 new_price_mini_dict['open'] = candle['open']
@@ -165,7 +172,6 @@ class PyRobot():
         data = {'step' : self._step, 'limit' : 1}
 
         for symbol in self.portfolio.positions:
-
             last_bar_response = bitstamp_requests(
                 request_parameter = 'ohlc',
                 currency_pair = symbol,
@@ -212,14 +218,11 @@ class PyRobot():
         print("Pausing for the next bar")
         print("-"*80)
         print("Curr Time: {time_curr}".format(
-            time_curr=curr_bar_time.strftime("%Y-%m-%d %H:%M:%S")
-        )
+            time_curr=curr_bar_time.strftime("%Y-%m-%d %H:%M:%S"))
         )
         print("Next Time: {time_next}".format(
-            time_next=next_bar_time.strftime("%Y-%m-%d %H:%M:%S")
+            time_next=next_bar_time.strftime("%Y-%m-%d %H:%M:%S"))
         )
-        )
-
         print("Sleep until next bar: {seconds} seconds".format(seconds=time_to_wait_now))
         time.sleep(time_to_wait_now)
 
